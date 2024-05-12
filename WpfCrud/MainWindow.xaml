@@ -6,7 +6,12 @@
     <Window.DataContext>
         <local:MainViewModel/>
     </Window.DataContext>
+    
     <StackPanel Margin="10">
+        <!-- Add this inside your Grid or other appropriate container -->
+        
+
+
         <TextBox Width="200" Margin="5" ToolTip="First Name" Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}"/>
         <TextBox Width="200" Margin="5" ToolTip="Last Name" Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}"/>
         <TextBox Width="200" Margin="5" ToolTip="Email" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"/>

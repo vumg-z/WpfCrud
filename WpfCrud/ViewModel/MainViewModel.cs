@@ -1,11 +1,17 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows;
 using System.Windows.Input;
 using WpfCrud.Model;
 
 namespace WpfCrud.ViewModel
 {
-    public class MainViewModel
+    public class MainViewModel : INotifyPropertyChanged
+
     {
+
+
         public ObservableCollection<Contact> Contacts { get; } = new ObservableCollection<Contact>();
         public Contact SelectedContact { get; set; }
 
@@ -15,6 +21,22 @@ namespace WpfCrud.ViewModel
         public string Email { get; set; }
         public string Phone { get; set; }
         public string Address { get; set; }
+
+        private bool _display3DCube;
+        public bool Display3DCube
+        {
+            get => _display3DCube;
+            set
+            {
+                if (_display3DCube != value)
+                {
+                    _display3DCube = value;
+                    OnPropertyChanged(nameof(Display3DCubeVisibility));
+                }
+            }
+        }
+
+        public Visibility Display3DCubeVisibility => Display3DCube ? Visibility.Visible : Visibility.Collapsed;
 
         public ICommand AddContactCommand { get; }
         public ICommand UpdateContactCommand { get; }
@@ -38,6 +60,19 @@ namespace WpfCrud.ViewModel
                 Address = this.Address
             };
             Contacts.Add(newContact);
+
+            Display3DCube = CheckEasterEgg();
+
+            if (CheckEasterEgg())
+            {
+                Display3DCube = true;
+                MessageBox.Show("hola profe, si lee esto entonces estamos en una situacion complicada."); // This provides immediate feedback
+            }
+            else
+            {
+                Display3DCube = false;
+            }
+
         }
 
         private bool CanUpdateOrDelete()
@@ -66,5 +101,23 @@ namespace WpfCrud.ViewModel
                 Contacts.Remove(SelectedContact);
             }
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        public bool CheckEasterEgg()
+        {
+            return FirstName?.Equals("chino", StringComparison.OrdinalIgnoreCase) == true;
+
+                   //LastName?.Equals("chino", StringComparison.OrdinalIgnoreCase) == true &&
+                   //Email?.Equals("chino", StringComparison.OrdinalIgnoreCase) == true &&
+                   //Phone?.Equals("chino", StringComparison.OrdinalIgnoreCase) == true &&
+                   //Address?.Equals("chino", StringComparison.OrdinalIgnoreCase) == true;
+        }
+
+
     }
 }
